@@ -250,12 +250,23 @@ export class RevealRenderer {
         for (const dir of searchPath) {
             const templateFile = join(dir, relativePath);
             if (await exists(templateFile)) {
-                return (await readFile(templateFile.toString())).toString();
+                console.info(
+                    `[Slides Extended] Loading template: ${templateFile}`,
+                );
+                const content = (
+                    await readFile(templateFile.toString())
+                ).toString();
+                if (!content.includes("{{#pluginNames}}")) {
+                    console.warn(
+                        `[Slides Extended] ⚠ Template "${templateFile}" does not contain {{#pluginNames}} — user plugins will NOT be added to Reveal.js. Copy the updated template/reveal.html from the plugin build output.`,
+                    );
+                }
+                return content;
             }
         }
 
         console.error(
-            `Template file ${relativePath} not found in search path: ${searchPath}.`,
+            `[Slides Extended] Template file "${relativePath}" not found. Searched: ${searchPath.join(", ")}`,
         );
         return "";
     }
