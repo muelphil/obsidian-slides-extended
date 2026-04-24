@@ -128,6 +128,10 @@ export class RevealRenderer {
             options.remoteScripts,
             this.utils.getScriptSearchPath(),
         );
+        const { pluginPaths, pluginNames } = this.getPluginInfo(
+            options.plugins,
+            this.utils.getScriptSearchPath(),
+        );
 
         const settings = this.yaml.getTemplateSettings(options);
 
@@ -159,6 +163,8 @@ export class RevealRenderer {
             remoteCSSPaths,
             scriptPaths,
             remoteScriptPaths,
+            pluginPaths,
+            pluginNames,
             base,
             enableCustomControls,
             enableChalkboard,
@@ -179,6 +185,7 @@ export class RevealRenderer {
                 : []),
             ...cssPaths.filter((p: string) => !this.isValidUrl(p)),
             ...scriptPaths.filter((p: string) => !this.isValidUrl(p)),
+            ...pluginPaths.filter((p: string) => !this.isValidUrl(p)),
         ];
 
         const template = await this.getPageTemplate(renderEmbedded);
@@ -268,6 +275,43 @@ export class RevealRenderer {
 
     private slidify(markdown: string, slidifyOptions: unknown) {
         return md.slidify(markdown, slidifyOptions);
+    }
+
+    private getPluginInfo(
+        plugins: string | string[] | undefined,
+        searchPath: string[],
+    ): { pluginPaths: string[]; pluginNames: string[] } {
+        const pluginPaths: string[] = [];
+        const pluginNames: string[] = [];
+
+        if (!plugins) {
+            return { pluginPaths, pluginNames };
+        }
+
+        const entries =
+            typeof plugins === "string" ? plugins.split(",") : plugins;
+
+        for (const entry of entries) {
+            const trimmed = entry.trim();
+            if (!trimmed) continue;
+
+            const colonIdx = trimmed.lastIndexOf(":");
+            if (colonIdx === -1) {
+                // No global name specified — load as plain script, skip plugin array.
+                pluginPaths.push(this.findAsset(trimmed, searchPath));
+                continue;
+            }
+
+            const filePath = trimmed.slice(0, colonIdx).trim();
+            const globalName = trimmed.slice(colonIdx + 1).trim();
+
+            if (!filePath || !globalName) continue;
+
+            pluginPaths.push(this.findAsset(filePath, searchPath));
+            pluginNames.push(globalName);
+        }
+
+        return { pluginPaths, pluginNames };
     }
 
     private getAssetPaths(assets: string | string[], searchPath: string[]) {

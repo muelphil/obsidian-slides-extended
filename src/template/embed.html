@@ -90,6 +90,9 @@
     {{#remoteScriptPaths}}
     <script src="{{{.}}}"></script>
     {{/remoteScriptPaths}}
+    {{#pluginPaths}}
+    <script src="{{{base}}}{{{.}}}"></script>
+    {{/pluginPaths}}
 
     <script>
         function extend() {
@@ -148,6 +151,9 @@
                 {{#enableAudioSlideshow}}
                 RevealAudioSlideshow,
                 {{/enableAudioSlideshow}}
+                {{#pluginNames}}
+                {{.}},
+                {{/pluginNames}}
             ],
             markdown: {
                 gfm: true,
@@ -169,6 +175,21 @@
             },
             {{/enableAudioSlideshow}}
         };
+
+        // Wire preprocessMarkdown for any registered plugin that exposes it.
+        {{#pluginNames}}
+        if (typeof {{.}} !== 'undefined' && typeof {{.}}.preprocessMarkdown === 'function') {
+            (function(_plug) {
+                const _prevMd = (defaultOptions.markdown || {}).preprocessMarkdown;
+                const _revOpts = {{{ revealOptionsStr }}};
+                defaultOptions.markdown = defaultOptions.markdown || {};
+                defaultOptions.markdown.preprocessMarkdown = function(md, section) {
+                    const out = _plug.preprocessMarkdown(md, _revOpts);
+                    return _prevMd ? _prevMd(out, section) : out;
+                };
+            })({{.}});
+        }
+        {{/pluginNames}}
 
         // options from URL query string
         const queryOptions = Reveal().getQueryHash() || {};

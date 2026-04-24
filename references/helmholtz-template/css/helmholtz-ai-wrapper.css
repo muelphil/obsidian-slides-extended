@@ -1,0 +1,24 @@
+/*
+ * Helmholtz AI Theme — Plugin CSS Wrapper
+ * ========================================
+ * This one-liner lives in the PLUGIN's css/ folder:
+ *
+ *   <vault>/.obsidian/plugins/slides-extended/css/helmholtz-ai.css
+ *
+ * WHY THIS EXISTS (Windows path bug in Obsidian Slides Extended)
+ * ──────────────────────────────────────────────────────────────
+ * The plugin's toExternalPath() strips the vault directory by string-
+ * replace. On Windows, path.join() normalises all separators to '\' but
+ * vaultDirectory is constructed with a trailing '/', so the replace never
+ * matches and the full absolute Windows path leaks into the <link> href.
+ *
+ * Files found inside the plugin's own css/ folder ARE stripped correctly
+ * (both sides use backslashes from path.join).  So we park a one-line
+ * @import here; the browser resolves it as an absolute-from-root URL and
+ * fetches the real CSS from the vault, where relative font/image paths
+ * work fine.
+ *
+ * If your assetsDirectory is NOT "_Templates/Reveal.js" update the path
+ * below to match, e.g. url('/MySlides/css/helmholtz-ai.css').
+ */
+@import url('/_Templates/Reveal.js/css/helmholtz-ai.css');

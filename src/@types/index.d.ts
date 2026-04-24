@@ -34,6 +34,7 @@ export interface SlidesExtendedSettings {
     mathEngine: "katex" | "mathjax";
     scripts: string;
     remoteScripts: string;
+    plugins: string;
     separator: string;
     verticalSeparator: string;
 }
@@ -65,6 +66,7 @@ export type Options = {
     remoteCSS: string | string[];
     scripts: string | string[];
     remoteScripts: string | string[];
+    plugins: string | string[];
     separator: string;
     showGrid: boolean;
     template: string;

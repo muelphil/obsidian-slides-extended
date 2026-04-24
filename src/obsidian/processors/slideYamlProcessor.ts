@@ -157,15 +157,15 @@ export class SlideYamlProcessor implements Processor {
         // string, then re-parse it into key/value pairs.
         const attrString = this.parser.buildAttributes(comment);
         const attrRegex = /(\S+)="([^"]*)"/g;
-        let m: RegExpExecArray | null;
-
-        while ((m = attrRegex.exec(attrString)) !== null) {
+        let m = attrRegex.exec(attrString);
+        while (m !== null) {
             const [, key, value] = m;
             if (key === "class") {
                 classes.push(...value.split(" ").filter(Boolean));
             } else {
                 attrs.set(key, value);
             }
+            m = attrRegex.exec(attrString);
         }
 
         return { attrs, classes };

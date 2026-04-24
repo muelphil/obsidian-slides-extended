@@ -19,6 +19,7 @@ const BASE_OPTIONS: Options = {
     remoteCSS: "",
     scripts: "",
     remoteScripts: "",
+    plugins: "",
     showGrid: false,
     template: "reveal.html",
     theme: "black",

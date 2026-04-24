@@ -1,0 +1,877 @@
+/* =============================================================================
+   Helmholtz AI Theme for Obsidian Slides Extended
+   Ported from shared/reveal-template/css/helmholtz-ai.css
+   =============================================================================
+   Slide coordinate space: 1600 × 1000 px  (16:10)
+
+   FILE PLACEMENT
+   ──────────────
+   Copy this file to:
+     <vault>/<assetsDirectory>/css/helmholtz-ai.css
+
+   With the default assetsDirectory "_Templates/Reveal.js" that means:
+     <vault>/_Templates/Reveal.js/css/helmholtz-ai.css
+
+   REQUIRED ASSETS  (all paths relative to this CSS file)
+   ──────────────────────────────────────────────────────
+   ../fonts/HalvarMittel-Rg.otf
+   ../fonts/HalvarMittel-Bd.otf
+   ../fonts/HalvarMittel-RgSlanted.otf
+   ../fonts/HalvarMittel-BdSlanted.otf
+   ../fonts/Hermann-Bold.otf
+   ../fonts/TexGyreCursor-Regular.otf
+   ../fonts/TexGyreCursor-Bold.otf
+   ../fonts/TexGyreCursor-Italic.otf
+   ../fonts/TexGyreCursor-Bold-Italic.otf
+   ../img/helmholtzai-logo-2-lines.svg
+   ../img/footer-bg.svg
+
+   RECOMMENDED YAML FRONTMATTER
+   ────────────────────────────
+   ---
+   theme: helmholtz-ai.css
+   width: 1600
+   height: 1000
+   margin: 0
+   center: false
+   slideNumber: true
+   ---
+
+   OBSIDIAN SLIDES EXTENDED: KEY DIFFERENCES FROM STANDALONE REVEAL.JS
+   ────────────────────────────────────────────────────────────────────
+   • No JavaScript injection → header logo and footer bar are rendered via
+     CSS ::before / ::after pseudo-elements on each <section>.
+   • Title slides (.title-slide) suppress both overlays automatically.
+   • Speaker info cannot appear dynamically in the footer; add it manually
+     using the .hzai-footer-text snippet shown in OBSIDIAN.md.
+   • All --r-* variables below are REQUIRED by the plugin — omitting any
+     one of them will break the slide preview.
+   ============================================================================= */
+
+
+/* ---------------------------------------------------------------------------
+   1. FONT FACES
+   --------------------------------------------------------------------------- */
+
+@font-face {
+    font-family: 'HalvarMittel';
+    src: url('../fonts/HalvarMittel-Rg.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'HalvarMittel';
+    src: url('../fonts/HalvarMittel-Bd.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'HalvarMittel';
+    src: url('../fonts/HalvarMittel-RgSlanted.otf') format('opentype');
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'HalvarMittel';
+    src: url('../fonts/HalvarMittel-BdSlanted.otf') format('opentype');
+    font-weight: 700;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'HermannBold';
+    src: url('../fonts/Hermann-Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'TexGyreCursor';
+    src: url('../fonts/TexGyreCursor-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'TexGyreCursor';
+    src: url('../fonts/TexGyreCursor-Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'TexGyreCursor';
+    src: url('../fonts/TexGyreCursor-Italic.otf') format('opentype');
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'TexGyreCursor';
+    src: url('../fonts/TexGyreCursor-Bold-Italic.otf') format('opentype');
+    font-weight: 700;
+    font-style: italic;
+}
+
+
+/* ---------------------------------------------------------------------------
+   2. REVEAL.JS REQUIRED CSS VARIABLES  (all --r-* names are mandatory)
+
+   The plugin reads --r-background-color to determine whether to apply
+   .has-light-background to <body>. White → light-background class is set,
+   which adjusts plugin UI chrome colours via slides-extended.css.
+   --------------------------------------------------------------------------- */
+
+:root {
+    /* ── Reveal.js internals (required by the plugin's exposer.scss) ── */
+    --r-background-color:           #ffffff;
+    --r-main-font:                  'HalvarMittel', Arial, Helvetica, sans-serif;
+    --r-main-font-size:             43px;        /* calibrated for 1600×1000 */
+    --r-main-color:                 #002864;
+    --r-block-margin:               16px;
+    --r-heading-margin:             0 0 16px 0;
+    --r-heading-font:               'HermannBold', 'HalvarMittel', Arial, sans-serif;
+    --r-heading-color:              #002864;
+    --r-heading-line-height:        1.15;
+    --r-heading-letter-spacing:     0.01em;
+    --r-heading-text-transform:     uppercase;
+    --r-heading-text-shadow:        none;
+    --r-heading-font-weight:        700;
+    --r-heading1-text-shadow:       none;
+    --r-heading1-size:              2.5em;
+    --r-heading2-size:              1.8em;
+    --r-heading3-size:              0.78em;
+    --r-heading4-size:              0.9em;
+    --r-code-font:                  'TexGyreCursor', 'Courier New', monospace;
+    --r-link-color:                 #05E5BA;
+    --r-link-color-dark:            #04b594;
+    --r-link-color-hover:           #14C8FF;
+    --r-selection-background-color: rgba(20, 200, 255, 0.75);
+    --r-selection-color:            #ffffff;
+    --r-overlay-element-bg-color:   240, 240, 240;
+    --r-overlay-element-fg-color:   0, 0, 0;
+
+    /* ── Helmholtz AI design tokens ── */
+    --hzai-darkblue:    #002864;
+    --hzai-blue:        #005AA0;
+    --hzai-lightblue:   #14C8FF;
+    --hzai-gray:        #5A696E;
+    --hzai-green:       #8CB423;
+    --hzai-mint:        #05E5BA;
+    --hzai-highlight:   #CDEEFB;
+    --hzai-matter:      #F0781E;
+
+    /* Research-field accents */
+    --hzai-aerospace:   #50C8AA;
+    --hzai-earth:       #326469;
+    --hzai-energy:      #FFD228;
+    --hzai-health:      #D23264;
+    --hzai-information: #A0235A;
+
+    /* ── Layout constants (in 1600 × 1000 slide-px) ── */
+    --hzai-logo-top:       27px;
+    --hzai-logo-left:      43px;
+    --hzai-logo-height:    20px;
+    --hzai-content-pad-h:  50px;
+    --hzai-footer-h:       46px;
+
+    /* ── Font aliases ── */
+    --hzai-font-body:  'HalvarMittel', Arial, Helvetica, sans-serif;
+    --hzai-font-title: 'HermannBold', 'HalvarMittel', Arial, sans-serif;
+    --hzai-font-mono:  'TexGyreCursor', 'Courier New', monospace;
+}
+
+
+/* ---------------------------------------------------------------------------
+   3. REVEAL.JS BASE OVERRIDES
+   --------------------------------------------------------------------------- */
+
+.reveal {
+    font-family: var(--hzai-font-body);
+    font-size: var(--r-main-font-size);
+    color: var(--hzai-darkblue);
+    background: var(--r-background-color);
+}
+
+.reveal .slides {
+    text-align: left;
+}
+
+/* All sections: full height, inset padding so content clears the overlays.
+   The section is a positioning context so ::before / ::after children can
+   be absolutely placed within the 1600×1000 coordinate space. */
+.reveal .slides section,
+html.reveal-print .reveal .slides section {
+    box-sizing: border-box;
+    position: relative;
+    text-align: left;
+    height: 100%;
+    padding-top: 80px !important;
+    padding-bottom: calc(var(--hzai-footer-h) + 10px) !important;
+    padding-left: var(--hzai-content-pad-h) !important;
+    padding-right: var(--hzai-content-pad-h) !important;
+}
+
+
+/* ---------------------------------------------------------------------------
+   4. HEADER OVERLAY  (CSS pseudo-element approach for Obsidian)
+
+   ::before on each non-title section renders the Helmholtz AI logo SVG
+   at the same position as the original template's injected <div>.
+   --------------------------------------------------------------------------- */
+
+.reveal .slides section:not(.title-slide)::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: calc(var(--hzai-logo-top) + var(--hzai-logo-height) + 10px); /* 57px */
+    background-image: url('../img/helmholtzai-logo-2-lines.svg');
+    background-repeat: no-repeat;
+    background-size: auto var(--hzai-logo-height);          /* preserve aspect ratio */
+    background-position: var(--hzai-logo-left) var(--hzai-logo-top); /* 43px 27px */
+    pointer-events: none;
+    z-index: 100;
+}
+
+/* If you want a page number in the top-right, enable Reveal's built-in
+   slideNumber in the YAML frontmatter:  slideNumber: true
+   Custom styling for the built-in counter: */
+.reveal .slide-number {
+    font-family: var(--hzai-font-body);
+    font-size: 16px;
+    color: var(--hzai-gray);
+    background: transparent;
+    top: var(--hzai-logo-top);
+    bottom: auto;
+    right: 30px;
+}
+
+/* Keep .hzai-header class functional for any manual HTML injection */
+.hzai-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: calc(var(--hzai-logo-top) + var(--hzai-logo-height) + 10px);
+    pointer-events: none;
+    z-index: 10;
+}
+
+.hzai-header .hzai-header-logo {
+    position: absolute;
+    top: var(--hzai-logo-top);
+    left: var(--hzai-logo-left);
+    height: var(--hzai-logo-height);
+    width: auto;
+    display: block;
+}
+
+.hzai-page-number {
+    position: absolute;
+    top: var(--hzai-logo-top);
+    right: 30px;
+    line-height: var(--hzai-logo-height);
+    font-family: var(--hzai-font-body);
+    font-size: 16px;
+    color: var(--hzai-gray);
+    white-space: nowrap;
+}
+
+
+/* ---------------------------------------------------------------------------
+   5. FOOTER OVERLAY  (CSS pseudo-element approach for Obsidian)
+
+   ::after on each non-title section renders footer-bg.svg (the two angled
+   shape paths + HELMHOLTZ AI wordmark) stretched to the full slide width.
+
+   Speaker info is NOT available dynamically. To add static text, place a
+   <span class="hzai-footer-text"> inside your slide's HTML after the
+   last content block — see OBSIDIAN.md for the full snippet.
+   --------------------------------------------------------------------------- */
+
+.reveal .slides section:not(.title-slide)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--hzai-footer-h);
+    background-image: url('../img/footer-bg.svg');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    z-index: 100;
+}
+
+/* Keep .hzai-footer class functional for any manual HTML injection */
+.hzai-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--hzai-footer-h);
+    pointer-events: none;
+    z-index: 10;
+    overflow: hidden;
+}
+
+.hzai-footer > svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Left strip: bottom 50 % of footer, spans ≈73.8 % of slide width */
+.hzai-footer-strip-left {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 73.8%;
+    height: 50%;
+    display: flex;
+    align-items: center;
+    padding-left: 2%;
+    overflow: hidden;
+}
+
+.hzai-footer-text {
+    font-family: var(--hzai-font-body);
+    font-size: 1.3rem;
+    line-height: 1;
+    color: var(--hzai-darkblue);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Right strip: full footer height, rightmost ≈26.2 % of slide width */
+.hzai-footer-strip-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 26.2%;
+    height: 100%;
+    display: flex;
+    margin-right: 2%;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.hzai-footer-strip-right .hzai-footer-logo {
+    display: block;
+    max-height: 45%;
+    object-fit: contain;
+    object-position: center;
+}
+
+
+/* ---------------------------------------------------------------------------
+   6. TYPOGRAPHY
+   --------------------------------------------------------------------------- */
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4 {
+    font-family: var(--hzai-font-title);
+    color: var(--hzai-darkblue);
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    line-height: 1.15;
+    text-shadow: none;
+}
+
+/* Frame title */
+.reveal h2 {
+    font-size: 1.8em;
+    margin: 0 0 0.5em 0;
+}
+
+/* Frame subtitle: styled as a light-blue caption, not all-caps */
+.reveal h3 {
+    font-size: 0.78em;
+    font-family: var(--hzai-font-body);
+    font-weight: 400;
+    text-transform: none;
+    color: var(--hzai-lightblue);
+    letter-spacing: 0;
+    margin: 0 0 18px 0;
+}
+
+.reveal h4 {
+    font-size: 0.9em;
+}
+
+.reveal .subtitle,
+.reveal .slide-subtitle {
+    font-family: var(--hzai-font-body);
+    font-size: 1.2em;
+    font-weight: 400;
+    text-transform: none;
+    color: var(--hzai-lightblue);
+    margin: 0 0 18px 0;
+    line-height: 1.4;
+    letter-spacing: 0;
+}
+
+.reveal p {
+    margin: 0.5em 0;
+    line-height: 1.5;
+}
+
+.reveal strong {
+    color: var(--hzai-darkblue);
+}
+
+.reveal em {
+    color: var(--hzai-gray);
+}
+
+.reveal a {
+    color: var(--hzai-mint);
+    text-decoration: underline;
+}
+
+.reveal a:hover {
+    color: var(--hzai-lightblue);
+}
+
+.reveal code {
+    font-family: var(--hzai-font-mono);
+    font-size: 0.82em;
+    color: var(--hzai-darkblue);
+    background: #f0f4f8;
+    border-radius: 3px;
+    padding: 1px 5px;
+}
+
+.reveal pre {
+    box-shadow: none;
+    border: 1px solid #dde6ef;
+    border-radius: 4px;
+    background: #f0f4f8;
+    width: 100%;
+    margin: 0.4em 0;
+}
+
+.reveal pre code {
+    padding: 12px 16px;
+    background: transparent;
+    max-height: 460px;
+    font-size: 0.76em;
+    line-height: 1.5;
+    color: var(--hzai-darkblue);
+}
+
+.reveal blockquote {
+    background: var(--hzai-highlight);
+    border-left: 4px solid var(--hzai-lightblue);
+    padding: 10px 20px;
+    border-radius: 2px;
+    margin: 0.5em 0;
+    font-style: normal;
+    color: var(--hzai-darkblue);
+    box-shadow: none;
+    width: auto;
+}
+
+.reveal blockquote p {
+    line-height: 1.5;
+}
+
+
+/* ---------------------------------------------------------------------------
+   7. LISTS  (circle bullets — mirrors Beamer theme)
+   --------------------------------------------------------------------------- */
+
+.reveal ul,
+.reveal ol {
+    margin: 0.2em 0 0.2em 1.1em;
+    padding: 0;
+    line-height: 1.6;
+}
+
+.reveal ul {
+    list-style: none;
+}
+
+.reveal ul li {
+    position: relative;
+    padding-left: 1.1em;
+}
+
+/* Level-1: dark blue circle */
+.reveal ul > li::before {
+    content: '';
+    display: inline-block;
+    width: 0.42em;
+    height: 0.42em;
+    border-radius: 50%;
+    background: var(--hzai-darkblue);
+    position: absolute;
+    left: 0;
+    top: 0.53em;
+}
+
+/* Level-2: light blue, slightly smaller */
+.reveal ul > li > ul > li::before {
+    background: var(--hzai-lightblue);
+    width: 0.36em;
+    height: 0.36em;
+}
+
+/* Level-3: dark blue, smallest */
+.reveal ul > li > ul > li > ul > li::before {
+    background: var(--hzai-darkblue);
+    width: 0.30em;
+    height: 0.30em;
+}
+
+.reveal ol {
+    list-style: decimal;
+}
+
+.reveal ol li::marker {
+    color: var(--hzai-darkblue);
+    font-weight: 700;
+}
+
+.reveal li {
+    margin: 0.12em 0;
+}
+
+
+/* ---------------------------------------------------------------------------
+   8. BLOCK ENVIRONMENTS
+   --------------------------------------------------------------------------- */
+
+.reveal .block,
+.reveal .block-example,
+.reveal .block-alert {
+    margin: 0.5em 0;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.reveal .block-title,
+.reveal .block-example-title,
+.reveal .block-alert-title {
+    font-family: var(--hzai-font-body);
+    font-weight: 700;
+    font-size: 0.8em;
+    text-transform: none;
+    color: #fff;
+    padding: 5px 14px;
+    letter-spacing: 0;
+    margin: 0;
+}
+
+.reveal .block-body,
+.reveal .block-example-body,
+.reveal .block-alert-body {
+    font-size: 0.8em;
+    padding: 7px 14px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* block → blue */
+.reveal .block-title      { background: #4d6fa8; }
+.reveal .block-body       { background: #ccd8eb; color: var(--hzai-darkblue); }
+
+/* exampleblock → gray */
+.reveal .block-example-title { background: #7d8f93; }
+.reveal .block-example-body  { background: #dfe4e5; color: var(--hzai-darkblue); }
+
+/* alertblock → purple */
+.reveal .block-alert-title { background: #8a1e4d; }
+.reveal .block-alert-body  { background: #d9a3bb; color: var(--hzai-darkblue); }
+
+
+/* ---------------------------------------------------------------------------
+   9. TWO-COLUMN LAYOUT
+   --------------------------------------------------------------------------- */
+
+.reveal .columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+.reveal .columns.col-3       { grid-template-columns: 1fr 1fr 1fr; }
+.reveal .columns.col-40-60   { grid-template-columns: 2fr 3fr; }
+.reveal .columns.col-60-40   { grid-template-columns: 3fr 2fr; }
+.reveal .columns.col-70-30   { grid-template-columns: 7fr 3fr; }
+.reveal .columns.col-30-70   { grid-template-columns: 3fr 7fr; }
+.reveal .columns.col-20-80   { grid-template-columns: 1fr 4fr; }
+.reveal .columns.col-80-20   { grid-template-columns: 4fr 1fr; }
+
+.reveal .column { min-width: 0; }
+
+.reveal .center-img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.reveal .columns.text-center {
+    text-align: center;
+    text-align: -webkit-center;
+}
+
+/* Per-slide font-size override via data-font-size attribute */
+.reveal .slides section[data-font-size] > :not(h2):not(.hzai-header):not(.hzai-footer) {
+    font-size: var(--slide-font-size);
+}
+
+/* Slide layout: image fills available height in the right column */
+.reveal .slides section.slide-image-fill {
+    display: grid !important;
+    grid-template-rows: auto 1fr;
+}
+
+.reveal .slide-image-fill .columns {
+    display: flex;
+    align-items: stretch;
+    gap: 24px;
+    min-height: 0;
+}
+
+.reveal .slide-image-fill .columns > .column:not(.image-col) {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.reveal .slide-image-fill .columns > .image-col {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    justify-content: center;
+}
+
+.reveal .slide-image-fill .columns > .image-col img {
+    min-height: 0;
+    width: auto;
+    display: block;
+    max-width: none;
+    object-fit: contain;
+    height: 94%;
+    flex: none;
+}
+
+
+/* ---------------------------------------------------------------------------
+   10. TITLE SLIDES  (no header / footer overlays)
+   --------------------------------------------------------------------------- */
+
+.reveal .slides section.title-slide {
+    height: 100%;
+    padding: 0 !important;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Suppress the pseudo-element overlays on title slides */
+.reveal .slides section.title-slide::before,
+.reveal .slides section.title-slide::after {
+    display: none;
+}
+
+/* Dark title variant */
+.reveal .slides section.title-slide.title-dark .title-content {
+    padding: 0 70px;
+    margin-top: 13%;
+}
+
+.reveal .slides section.title-slide.title-dark .title-brand {
+    font-family: var(--hzai-font-title);
+    font-size: 3.0em;
+    color: #fff;
+    text-transform: uppercase;
+    margin: 0 0 7% 0;
+    line-height: 1.1;
+}
+
+.reveal .slides section.title-slide.title-dark h2,
+.reveal .slides section.title-slide.title-dark .title-main {
+    font-family: var(--hzai-font-title);
+    font-size: 1.4em;
+    color: #fff;
+    text-transform: uppercase;
+    margin: 0 0 4px 0;
+}
+
+.reveal .slides section.title-slide.title-dark .subtitle {
+    font-size: 0.82em;
+    color: var(--hzai-lightblue);
+    margin: 0 0 7% 0;
+    text-transform: none;
+}
+
+.reveal .slides section.title-slide.title-dark .title-meta {
+    font-size: 0.55em;
+    color: var(--hzai-lightblue);
+    line-height: 1.8;
+}
+
+/* Light title variant */
+.reveal .slides section.title-slide.title-light .title-content {
+    padding: 0 70px;
+    margin-top: 25%;
+}
+
+.reveal .slides section.title-slide.title-light h2,
+.reveal .slides section.title-slide.title-light .title-main {
+    font-family: var(--hzai-font-title);
+    font-size: 1.5em;
+    color: var(--hzai-darkblue);
+    text-transform: uppercase;
+    margin: 0 0 4px 0;
+}
+
+.reveal .slides section.title-slide.title-light .subtitle {
+    font-size: 0.78em;
+    color: var(--hzai-blue);
+    margin: 0 0 7% 0;
+    text-transform: none;
+}
+
+.reveal .slides section.title-slide.title-light .title-meta {
+    font-size: 0.52em;
+    color: var(--hzai-blue);
+    line-height: 1.8;
+}
+
+
+/* ---------------------------------------------------------------------------
+   11. SECTION DIVIDER SLIDES
+   --------------------------------------------------------------------------- */
+
+.reveal .slides section.section-slide {
+    height: 100%;
+    padding: 80px 50px calc(var(--hzai-footer-h) + 10px) !important;
+    display: flex !important;
+    align-items: center;
+    background: #fff;
+}
+
+.reveal .slides section.section-slide .section-title {
+    font-family: var(--hzai-font-title);
+    font-size: 1.8em;
+    color: var(--hzai-darkblue);
+    text-transform: uppercase;
+    margin: 0;
+}
+
+
+/* ---------------------------------------------------------------------------
+   12. HELPER / UTILITY
+   --------------------------------------------------------------------------- */
+
+.reveal .source {
+    display: block;
+    font-size: 0.50em;
+    color: #8d9fa3;
+    margin-top: 4px;
+}
+
+/* Reference label (lower-left, above footer) */
+.reveal .reference {
+    position: absolute;
+    bottom: calc(var(--hzai-footer-h) + 8px);
+    left: var(--hzai-content-pad-h);
+    font-size: 0.44em;
+    color: var(--hzai-gray);
+    max-width: 55%;
+    line-height: 1.4;
+}
+
+/* Collaborator logos (lower-right, above footer) */
+.reveal .collaborators {
+    position: absolute;
+    bottom: calc(var(--hzai-footer-h) + 10px);
+    right: var(--hzai-content-pad-h);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.reveal .collaborators img {
+    height: 22px;
+    width: auto;
+}
+
+/* Hermann Bold inline emphasis */
+.reveal .hermann {
+    font-family: var(--hzai-font-title);
+    font-weight: 700;
+}
+
+/* Highlight box */
+.reveal .highlight-box {
+    background: var(--hzai-highlight);
+    border-left: 4px solid var(--hzai-lightblue);
+    padding: 10px 16px;
+    border-radius: 2px;
+    margin: 0.5em 0;
+}
+
+.reveal .center    { text-align: center; }
+.reveal .vspace-sm { margin-top: 0.5em; }
+.reveal .vspace-md { margin-top: 1.0em; }
+.reveal .vspace-lg { margin-top: 2.0em; }
+
+.reveal img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Tables */
+.reveal table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.78em;
+    color: var(--hzai-darkblue);
+}
+
+.reveal table th {
+    font-weight: 700;
+    border-bottom: 2px solid var(--hzai-darkblue);
+    padding: 6px 12px;
+    text-align: left;
+}
+
+.reveal table td {
+    border-bottom: 1px solid #d4dee2;
+    padding: 5px 12px;
+}
+
+.reveal table tr:first-child th {
+    border-top: 2px solid var(--hzai-darkblue);
+}
+
+/* Math */
+.reveal .MathJax,
+.reveal .katex {
+    color: var(--hzai-darkblue);
+}
+
+/* Fragments */
+.reveal .fragment {
+    transition: all 0.18s ease;
+}
+
+/* Ensure Reveal navigation controls don't overlap the footer */
+.reveal .controls {
+    bottom: 5em;
+}

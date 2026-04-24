@@ -224,6 +224,33 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
                     }),
             );
 
+        new Setting(containerEl)
+            .setName("Reveal.js plugins")
+            .setHeading()
+            .setDesc(
+                "Register Reveal.js plugins that participate in the plugins[] init array. " +
+                    "Each entry is <path>:<GlobalName>. Override per-note using the 'plugins' property.",
+            );
+
+        new Setting(containerEl)
+            .setName("Plugins")
+            .setDesc(
+                "Comma-separated plugin entries in the format path/to/plugin.js:GlobalName. " +
+                    "The script at <path> is loaded and <GlobalName> is added to plugins:[]. " +
+                    "If the plugin exposes a preprocessMarkdown(text, options) method, it is " +
+                    "automatically wired to Reveal.js markdown preprocessing.",
+            )
+            .addText((text) =>
+                text
+                    .setPlaceholder(
+                        "helmholtz-ai/js/helmholtz-ai-plugin.js:HelmholtzAIPlugin",
+                    )
+                    .setValue(this.newSettings.plugins)
+                    .onChange((value) => {
+                        this.newSettings.plugins = value;
+                    }),
+            );
+
         new Setting(containerEl).setName("Slides").setHeading();
 
         themeSettings.slide = new Setting(containerEl)

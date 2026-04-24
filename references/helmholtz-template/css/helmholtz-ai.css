@@ -1,0 +1,851 @@
+/* =============================================================================
+   Helmholtz AI Reveal.js Theme
+   Ported from the Helmholtz AI LaTeX Beamer Template
+   =============================================================================
+   Slide coordinate space: 1600 × 1000 px  (16:10)
+
+/* ---------------------------------------------------------------------------
+   1. FONT FACES
+   --------------------------------------------------------------------------- */
+
+@font-face {
+    font-family: 'HalvarMittel';
+    src: url('../fonts/HalvarMittel-Rg.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'HalvarMittel';
+    src: url('../fonts/HalvarMittel-Bd.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'HalvarMittel';
+    src: url('../fonts/HalvarMittel-RgSlanted.otf') format('opentype');
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'HalvarMittel';
+    src: url('../fonts/HalvarMittel-BdSlanted.otf') format('opentype');
+    font-weight: 700;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'HermannBold';
+    src: url('../fonts/Hermann-Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'TexGyreCursor';
+    src: url('../fonts/TexGyreCursor-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'TexGyreCursor';
+    src: url('../fonts/TexGyreCursor-Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'TexGyreCursor';
+    src: url('../fonts/TexGyreCursor-Italic.otf') format('opentype');
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'TexGyreCursor';
+    src: url('../fonts/TexGyreCursor-Bold-Italic.otf') format('opentype');
+    font-weight: 700;
+    font-style: italic;
+}
+
+/* ---------------------------------------------------------------------------
+   2. DESIGN TOKENS
+   --------------------------------------------------------------------------- */
+
+:root {
+    /* Core palette (from beamercolorthemehelmholtzai.sty) */
+    --hzai-darkblue: #002864; /* hgfdarkblue  RGB(0,40,100)    */
+    --hzai-blue: #005AA0; /* hgfblue      RGB(0,90,160)    */
+    --hzai-lightblue: #14C8FF; /* hgflightblue RGB(20,200,255)  */
+    --hzai-gray: #5A696E; /* hgfgray      RGB(90,105,110)  */
+    --hzai-green: #8CB423;
+    --hzai-mint: #05E5BA;
+    --hzai-highlight: #CDEEFB;
+    --hzai-matter: #F0781E; /* hgfmatter – used for author in footer */
+
+    /* Research-field accents */
+    --hzai-aerospace: #50C8AA;
+    --hzai-earth: #326469;
+    --hzai-energy: #FFD228;
+    --hzai-health: #D23264;
+    --hzai-information: #A0235A;
+
+    /* ── Layout constants (in 1600 × 1000 slide-px) ── */
+    --hzai-logo-top: 27px; /* 2.7% × 1000 */
+    --hzai-logo-left: 43px; /* 4.3% × 1000 */
+    --hzai-logo-height: 20px; /* 2.0% × 1000 */
+    --hzai-content-pad-h: 50px; /* horizontal slide padding */
+    --hzai-footer-h: 46px; /* 13.091/461 × 1600 ≈ 45.4 → 46px */
+
+    /* ── Fonts ── */
+    --hzai-font-body: 'HalvarMittel', Arial, Helvetica, sans-serif;
+    --hzai-font-title: 'HermannBold', 'HalvarMittel', Arial, sans-serif;
+    --hzai-font-mono: 'TexGyreCursor', 'Courier New', monospace;
+}
+
+/* ---------------------------------------------------------------------------
+   3. REVEAL.JS BASE OVERRIDES
+   --------------------------------------------------------------------------- */
+
+.reveal {
+    font-family: var(--hzai-font-body);
+    font-size: 43px;
+    color: var(--hzai-darkblue);
+    background: #ffffff;
+}
+
+/* Disable Reveal's default vertical centering; keep slides top-left */
+.reveal .slides {
+    text-align: left;
+}
+
+.reveal .slides section, html.reveal-print .reveal .slides section {
+    box-sizing: border-box;
+    text-align: left;
+    /* height: 100% means 100% of .slides (= the configured 1000 px slide height).
+       This is correct for Reveal's native transform-based scaling: sections live
+       inside the 1600×1000 coordinate space and Reveal scales that box to fit the
+       viewport. Using 100vh here would break scaling because the footer/header
+       would be positioned relative to viewport height, not slide height. */
+    height: 100%;
+    /* Reserve space so content clears the absolute header and footer overlays */
+    padding-top: 80px !important;
+    padding-bottom: calc(var(--hzai-footer-h) + 10px) !important;
+    padding-left: var(--hzai-content-pad-h) !important;
+    padding-right: var(--hzai-content-pad-h) !important;
+}
+
+/* ---------------------------------------------------------------------------
+   4. HEADER OVERLAY  (absolute inside each non-title section)
+
+   With disableLayout:true, sections are their configured 1600×1000 px and
+   no transform scaling is applied, so px values here are reliable.
+   --------------------------------------------------------------------------- */
+
+.hzai-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: calc(var(--hzai-logo-top) + var(--hzai-logo-height) + 10px);
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* Use parent selector to raise specificity above .reveal img { height: auto } */
+.hzai-header .hzai-header-logo {
+    position: absolute;
+    top: var(--hzai-logo-top); /* 27px */
+    left: var(--hzai-logo-left); /* 43px */
+    height: var(--hzai-logo-height); /* 20px – must beat .reveal img { height:auto } */
+    width: auto;
+    display: block;
+}
+
+.hzai-page-number {
+    position: absolute;
+    top: var(--hzai-logo-top);
+    right: 30px;
+    line-height: var(--hzai-logo-height);
+    font-family: var(--hzai-font-body);
+    font-size: 16px;
+    color: var(--hzai-gray);
+    white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------------
+   5. FOOTER OVERLAY  (absolute inside each non-title section)
+
+   Pinned to the bottom of the 1600×1000 section. The SVG background uses
+   preserveAspectRatio="none" so it always fills the full slide width while
+   the height stays fixed at --hzai-footer-h (46px).
+   --------------------------------------------------------------------------- */
+
+.hzai-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--hzai-footer-h);
+    pointer-events: none;
+    z-index: 10;
+    overflow: hidden;
+}
+
+/* The SVG fills the full footer area */
+.hzai-footer > svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/*
+ * Left-strip helper  ─  mirrors the narrow horizontal light-blue band.
+ * SVG geometry: y = 6.546 → 13.091  (50 % of footer height)
+ *               x = 0    → 340.162  (73.8 % of footer width, bottom edge)
+ * The helper is positioned at the bottom of the footer and spans that area,
+ * centering the speaker-info text vertically within it.
+ */
+.hzai-footer-strip-left {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 73.8%; /* 340.162 / 461 ≈ 73.8 % — where the diagonal starts */
+    height: 50%; /* 6.545  / 13.091 ≈ 50 % — height of the narrow strip  */
+    display: flex;
+    align-items: center;
+    padding-left: 2%;
+    overflow: hidden;
+}
+
+/* Speaker info text inside the left strip */
+.hzai-footer-text {
+    font-family: var(--hzai-font-body);
+    font-size: 1.3rem;
+    line-height: 1;
+    color: var(--hzai-darkblue);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/*
+ * Right-strip helper  ─  mirrors the tall right light-blue section.
+ * SVG geometry: x = 340.162 → 460.095  (26.2 % of footer width)
+ *               y = 0       → 13.091   (100 % of footer height)
+ * The helper centers the HELMHOLTZ AI logo image within this area.
+ */
+.hzai-footer-strip-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 26.2%; /* 1 - 340.162/461 ≈ 26.2 % */
+    height: 100%;
+    display: flex;
+
+
+    margin-right: 2%;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+/* HELMHOLTZ AI logo – parent selector raises specificity above .reveal img */
+.hzai-footer-strip-right .hzai-footer-logo {
+    display: block;
+    max-height: 45%;
+    object-fit: contain;
+    object-position: center;
+}
+
+/* ---------------------------------------------------------------------------
+   6. TYPOGRAPHY
+   --------------------------------------------------------------------------- */
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4 {
+    font-family: var(--hzai-font-title);
+    color: var(--hzai-darkblue);
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    line-height: 1.15;
+    text-shadow: none;
+}
+
+/* Frame title (the primary slide heading) */
+.reveal h2 {
+    font-size: 1.8em;
+    margin: 0 0 0.5em 0;
+}
+
+/* Frame subtitle */
+.reveal h3 {
+    font-size: 0.78em;
+    font-family: var(--hzai-font-body);
+    font-weight: 400;
+    text-transform: none;
+    color: var(--hzai-lightblue);
+    letter-spacing: 0;
+    margin: 0 0 18px 0;
+}
+
+.reveal h4 {
+    font-size: 0.9em;
+}
+
+/* Explicit subtitle classes */
+.reveal .subtitle,
+.reveal .slide-subtitle {
+    font-family: var(--hzai-font-body);
+    font-size: 1.2em;
+    font-weight: 400;
+    text-transform: none;
+    color: var(--hzai-lightblue);
+    margin: 0 0 18px 0;
+    line-height: 1.4;
+    letter-spacing: 0;
+}
+
+.reveal p {
+    margin: 0.5em 0;
+    line-height: 1.5;
+}
+
+.reveal strong {
+    color: var(--hzai-darkblue);
+}
+
+.reveal em {
+    color: var(--hzai-gray);
+}
+
+.reveal a {
+    color: var(--hzai-mint);
+    text-decoration: underline;
+}
+
+.reveal a:hover {
+    color: var(--hzai-lightblue);
+}
+
+.reveal code {
+    font-family: var(--hzai-font-mono);
+    font-size: 0.82em;
+    color: var(--hzai-darkblue);
+    background: #f0f4f8;
+    border-radius: 3px;
+    padding: 1px 5px;
+}
+
+.reveal pre {
+    box-shadow: none;
+    border: 1px solid #dde6ef;
+    border-radius: 4px;
+    background: #f0f4f8;
+    width: 100%;
+    margin: 0.4em 0;
+}
+
+.reveal pre code {
+    padding: 12px 16px;
+    background: transparent;
+    max-height: 460px;
+    font-size: 0.76em;
+    line-height: 1.5;
+    color: var(--hzai-darkblue);
+}
+
+/* Blockquotes */
+.reveal blockquote {
+    background: var(--hzai-highlight);
+    border-left: 4px solid var(--hzai-lightblue);
+    padding: 10px 20px;
+    border-radius: 2px;
+    margin: 0.5em 0;
+    font-style: normal;
+    color: var(--hzai-darkblue);
+    box-shadow: none;
+    width: auto;
+}
+
+.reveal blockquote p {
+    line-height: 1.5;
+}
+
+/* ---------------------------------------------------------------------------
+   7. LISTS  (mirrors Beamer circle-bullet theme)
+   --------------------------------------------------------------------------- */
+
+.reveal ul,
+.reveal ol {
+    margin: 0.2em 0 0.2em 1.1em;
+    padding: 0;
+    line-height: 1.6;
+}
+
+.reveal ul {
+    list-style: none;
+}
+
+.reveal ul li {
+    position: relative;
+    padding-left: 1.1em;
+}
+
+/* Level-1 bullet: dark blue circle */
+.reveal ul > li::before {
+    content: '';
+    display: inline-block;
+    width: 0.42em;
+    height: 0.42em;
+    border-radius: 50%;
+    background: var(--hzai-darkblue);
+    position: absolute;
+    left: 0;
+    top: 0.53em;
+}
+
+/* Level-2 bullet: light blue */
+.reveal ul > li > ul > li::before {
+    background: var(--hzai-lightblue);
+    width: 0.36em;
+    height: 0.36em;
+}
+
+/* Level-3 bullet: dark blue (smaller) */
+.reveal ul > li > ul > li > ul > li::before {
+    background: var(--hzai-darkblue);
+    width: 0.30em;
+    height: 0.30em;
+}
+
+.reveal ol {
+    list-style: decimal;
+}
+
+.reveal ol li::marker {
+    color: var(--hzai-darkblue);
+    font-weight: 700;
+}
+
+.reveal li {
+    margin: 0.12em 0;
+}
+
+/* ---------------------------------------------------------------------------
+   8. BLOCK ENVIRONMENTS
+   --------------------------------------------------------------------------- */
+
+.reveal .block,
+.reveal .block-example,
+.reveal .block-alert {
+    margin: 0.5em 0;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.reveal .block-title,
+.reveal .block-example-title,
+.reveal .block-alert-title {
+    font-family: var(--hzai-font-body);
+    font-weight: 700;
+    font-size: 0.8em;
+    text-transform: none;
+    color: #fff;
+    padding: 5px 14px;
+    letter-spacing: 0;
+    margin: 0;
+}
+
+.reveal .block-body,
+.reveal .block-example-body,
+.reveal .block-alert-body {
+    font-size: 0.8em;
+    padding: 7px 14px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* block → blue */
+.reveal .block-title {
+    background: #4d6fa8;
+}
+
+/* darkblue 60% */
+.reveal .block-body {
+    background: #ccd8eb;
+    color: var(--hzai-darkblue);
+}
+
+/* exampleblock → gray */
+.reveal .block-example-title {
+    background: #7d8f93;
+}
+
+/* gray 60% */
+.reveal .block-example-body {
+    background: #dfe4e5;
+    color: var(--hzai-darkblue);
+}
+
+/* alertblock → purple */
+.reveal .block-alert-title {
+    background: #8a1e4d;
+}
+
+/* information 80% */
+.reveal .block-alert-body {
+    background: #d9a3bb;
+    color: var(--hzai-darkblue);
+}
+
+/* ---------------------------------------------------------------------------
+   9. TWO-COLUMN LAYOUT
+   --------------------------------------------------------------------------- */
+
+.reveal .columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+.reveal .columns.col-3 {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.reveal .columns.col-40-60 {
+    grid-template-columns: 2fr 3fr;
+}
+
+.reveal .columns.col-60-40 {
+    grid-template-columns: 3fr 2fr;
+}
+
+.reveal .columns.col-70-30 {
+    grid-template-columns: 7fr 3fr;
+}
+
+.reveal .columns.col-30-70 {
+    grid-template-columns: 3fr 7fr;
+}
+
+.reveal .columns.col-20-80 {
+    grid-template-columns: 1fr 4fr;
+}
+
+.reveal .columns.col-80-20 {
+    grid-template-columns: 4fr 1fr;
+}
+
+.reveal .column {
+    min-width: 0;
+}
+
+/* ── Utility: center images ────────────────────────────────────────────────── */
+.reveal .center-img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ── Utility: center text inside columns ───────────────────────────────────── */
+.reveal .columns.text-center {
+    text-align: center;
+    text-align: -webkit-center;
+}
+
+/* ── Per-slide font-size override (set via YAML front-matter) ──────────────
+   Only affects content, not the slide heading (h2).
+   Plugin sets --slide-font-size CSS variable on sections with data-font-size.
+   ──────────────────────────────────────────────────────────────────────────── */
+.reveal .slides section[data-font-size] > :not(h2):not(.hzai-header):not(.hzai-footer) {
+    font-size: var(--slide-font-size);
+}
+
+/* ── col-image-right: right column auto-sized to image aspect ratio ─────────
+   Usage:
+     <section class="slide-image-fill">   ← added via <!-- .slide: class="..." -->
+       <h2>Title</h2>
+       <div class="columns col-image-right">
+         <div class="column">…text…</div>
+         <div class="column image-col"><img …/><p class="source">…</p></div>
+       </div>
+     </section>
+
+   How it works:
+   1. section becomes a 2-row CSS grid (auto = h2, 1fr = columns) so the
+      columns div receives a definite height without knowing the h2 height.
+   2. columns is a flex row; right column is flex:0 0 auto (sized by content).
+   3. right column is itself a flex column; img gets all remaining flex height.
+   4. width:auto on a replaced element whose height is flex-determined resolves
+      via the intrinsic aspect ratio → column width = image width = h × (w/h).
+   5. left column (flex:1) fills whatever horizontal space is left.
+   ──────────────────────────────────────────────────────────────────────────── */
+.reveal .slides section.slide-image-fill {
+    display: grid !important;
+    grid-template-rows: auto 1fr;
+}
+
+.reveal .slide-image-fill .columns {
+    display: flex;
+    align-items: stretch;
+    gap: 24px;
+    min-height: 0; /* allow flex children to shrink below content size */
+}
+
+.reveal .slide-image-fill .columns > .column:not(.image-col) {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.reveal .slide-image-fill .columns > .image-col {
+    flex: 0 0 auto; /* width comes from content (image aspect ratio) */
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    justify-content: center;
+}
+
+.reveal .slide-image-fill .columns > .image-col img {
+    min-height: 0;
+    width: auto; /* replaced element: width = height × intrinsic-ratio */
+    display: block;
+    max-width: none;
+    object-fit: contain;
+
+    height: 94%;
+    flex: none;
+}
+
+/* ---------------------------------------------------------------------------
+   10. TITLE SLIDES
+   --------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------------
+   Title slides: also need full viewport height, but no padding
+   (the plugin never injects header/footer into them, so they are clean)
+   --------------------------------------------------------------------------- */
+.reveal .slides section.title-slide {
+    height: 100%;
+    padding: 0;
+    background-size: cover;
+    background-position: center;
+}
+
+/* -- Dark title (generic / computing / chip / abstract) -- */
+.reveal .slides section.title-slide.title-dark .title-content {
+    padding: 0 70px;
+    margin-top: 13%;
+}
+
+.reveal .slides section.title-slide.title-dark .title-brand {
+    font-family: var(--hzai-font-title);
+    font-size: 3.0em;
+    color: #fff;
+    text-transform: uppercase;
+    margin: 0 0 7% 0;
+    line-height: 1.1;
+}
+
+.reveal .slides section.title-slide.title-dark h2,
+.reveal .slides section.title-slide.title-dark .title-main {
+    font-family: var(--hzai-font-title);
+    font-size: 1.4em;
+    color: #fff;
+    text-transform: uppercase;
+    margin: 0 0 4px 0;
+}
+
+.reveal .slides section.title-slide.title-dark .subtitle {
+    font-size: 0.82em;
+    color: var(--hzai-lightblue);
+    margin: 0 0 7% 0;
+    text-transform: none;
+}
+
+.reveal .slides section.title-slide.title-dark .title-meta {
+    font-size: 0.55em;
+    color: var(--hzai-lightblue);
+    line-height: 1.8;
+}
+
+/* -- Light title (aeronautics / energy / health / earth / information / matter) -- */
+.reveal .slides section.title-slide.title-light .title-content {
+    padding: 0 70px;
+    margin-top: 25%;
+}
+
+.reveal .slides section.title-slide.title-light h2,
+.reveal .slides section.title-slide.title-light .title-main {
+    font-family: var(--hzai-font-title);
+    font-size: 1.5em;
+    color: var(--hzai-darkblue);
+    text-transform: uppercase;
+    margin: 0 0 4px 0;
+}
+
+.reveal .slides section.title-slide.title-light .subtitle {
+    font-size: 0.78em;
+    color: var(--hzai-blue);
+    margin: 0 0 7% 0;
+    text-transform: none;
+}
+
+.reveal .slides section.title-slide.title-light .title-meta {
+    font-size: 0.52em;
+    color: var(--hzai-blue);
+    line-height: 1.8;
+}
+
+/* ---------------------------------------------------------------------------
+   11. SECTION DIVIDER SLIDES
+   --------------------------------------------------------------------------- */
+
+.reveal .slides section.section-slide {
+    height: 100%;
+    padding: 80px 50px calc(var(--hzai-footer-h) + 10px);
+    display: flex !important;
+    align-items: center;
+    background: #fff;
+}
+
+.reveal .slides section.section-slide .section-title {
+    font-family: var(--hzai-font-title);
+    font-size: 1.8em;
+    color: var(--hzai-darkblue);
+    text-transform: uppercase;
+    margin: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   12. HELPER / UTILITY
+   --------------------------------------------------------------------------- */
+
+.reveal .source {
+    display: block;
+    font-size: 0.50em;
+    color: #8d9fa3;
+    margin-top: 4px;
+}
+
+/* Reference label (lower-left, above footer) */
+.reveal .reference {
+    position: absolute;
+    bottom: calc(var(--hzai-footer-h) + 8px);
+    left: var(--hzai-content-pad-h);
+    font-size: 0.44em;
+    color: var(--hzai-gray);
+    max-width: 55%;
+    line-height: 1.4;
+}
+
+/* Collaborator logos (lower-right, above footer) */
+.reveal .collaborators {
+    position: absolute;
+    bottom: calc(var(--hzai-footer-h) + 10px);
+    right: var(--hzai-content-pad-h);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.reveal .collaborators img {
+    height: 22px;
+    width: auto;
+}
+
+/* Hermann bold inline */
+.reveal .hermann {
+    font-family: var(--hzai-font-title);
+    font-weight: 700;
+}
+
+/* Highlight box */
+.reveal .highlight-box {
+    background: var(--hzai-highlight);
+    border-left: 4px solid var(--hzai-lightblue);
+    padding: 10px 16px;
+    border-radius: 2px;
+    margin: 0.5em 0;
+}
+
+.reveal .center {
+    text-align: center;
+}
+
+.reveal .vspace-sm {
+    margin-top: 0.5em;
+}
+
+.reveal .vspace-md {
+    margin-top: 1.0em;
+}
+
+.reveal .vspace-lg {
+    margin-top: 2.0em;
+}
+
+.reveal img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Tables */
+.reveal table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.78em;
+    color: var(--hzai-darkblue);
+}
+
+.reveal table th {
+    font-weight: 700;
+    border-bottom: 2px solid var(--hzai-darkblue);
+    padding: 6px 12px;
+    text-align: left;
+}
+
+.reveal table td {
+    border-bottom: 1px solid #d4dee2;
+    padding: 5px 12px;
+}
+
+.reveal table tr:first-child th {
+    border-top: 2px solid var(--hzai-darkblue);
+}
+
+/* Math */
+.reveal .MathJax,
+.reveal .katex {
+    color: var(--hzai-darkblue);
+}
+
+/* Fragments */
+.reveal .fragment {
+    transition: all 0.18s ease;
+}
+
+
+.slides {
+    /*width: 100% !important;*/
+    /*height: 100% !important;*/
+    /*    transform: initial !important;*/
+    /*    inset: initial !important;*/
+}
+
+section {
+    height: 100%;
+}
+
+.reveal .controls {
+    bottom: 5em;
+}
+

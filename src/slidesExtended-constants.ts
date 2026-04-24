@@ -32,6 +32,7 @@ export const DEFAULT_SETTINGS: SlidesExtendedSettings = {
     mathEngine: "katex",
     scripts: "",
     remoteScripts: "",
+    plugins: "",
     separator: "",
     verticalSeparator: "",
 };
@@ -50,6 +51,7 @@ export const DEFAULTS: Options = {
     remoteCSS: "",
     scripts: "",
     remoteScripts: "",
+    plugins: "",
     separator: "\r?\n---\r?\n",
     showGrid: false,
     template: "reveal.html",
