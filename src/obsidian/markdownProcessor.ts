@@ -22,6 +22,7 @@ import { MermaidProcessor } from "./processors/mermaidProcessor";
 import { MultipleFileProcessor } from "./processors/multipleFileProcessor";
 import { ReferenceProcessor } from "./processors/referenceProcessor";
 import { SkipSlideProcessor } from "./processors/skipSlideProcessor";
+import { SlideYamlProcessor } from "./processors/slideYamlProcessor";
 import { TemplateProcessor } from "./processors/templateProcessor";
 
 interface ProcessStep {
@@ -52,6 +53,7 @@ export class MarkdownProcessor {
     private defaultBackgroundProcessor: DefaultBackgroundProcessor;
     private referenceProcessor: ReferenceProcessor;
     private skipSlideProcessor: SkipSlideProcessor;
+    private slideYamlProcessor: SlideYamlProcessor;
     private stripLatexBackTicks: Processor;
 
     constructor(utils: ObsidianUtils) {
@@ -77,6 +79,7 @@ export class MarkdownProcessor {
         this.defaultBackgroundProcessor = new DefaultBackgroundProcessor();
         this.referenceProcessor = new ReferenceProcessor();
         this.skipSlideProcessor = new SkipSlideProcessor();
+        this.slideYamlProcessor = new SlideYamlProcessor();
         this.stripLatexBackTicks = {
             process: (markdown: string, _: Options) => {
                 return markdown.replaceAll("%`%", "");
@@ -181,6 +184,11 @@ export class MarkdownProcessor {
             {
                 name: "autoClosingProcessor",
                 processor: this.autoClosingProcessor,
+            },
+            // Convert per-slide fenced ```yaml blocks to <!-- .slide: data-*="..." -->
+            {
+                name: "slideYamlProcessor",
+                processor: this.slideYamlProcessor,
             },
             // Apply default backgrounds
             {
