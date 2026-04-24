@@ -1,5 +1,5 @@
 import path from "node:path";
-import { readFileSync } from "fs-extra";
+import { readdirSync, readFileSync, statSync } from "fs-extra";
 import {
     type App,
     FileSystemAdapter,
@@ -146,6 +146,36 @@ export class ObsidianUtils implements MediaCollector {
                 path.join(assetsDir, "js"),
                 assetsDir,
             );
+
+            // Scan one level of subdirectories under assetsDir so that per-template
+            // directories (e.g. helmholtz-ai/) are also searched without requiring
+            // users to specify full sub-paths for css, js, or html files.
+            try {
+                const subdirs = readdirSync(assetsDir).filter((entry) => {
+                    try {
+                        return statSync(
+                            path.join(assetsDir, entry),
+                        ).isDirectory();
+                    } catch {
+                        return false;
+                    }
+                });
+
+                for (const subdir of subdirs) {
+                    const subBase = path.join(assetsDir, subdir);
+                    const subCss = path.join(subBase, "css");
+                    const subJs = path.join(subBase, "js");
+                    const subHtml = path.join(subBase, "html");
+
+                    this.cssSearchPath.unshift(subCss, subBase);
+                    this.highlightSearchPath.unshift(subCss, subBase);
+                    this.themeSearchPath.unshift(subCss, subBase);
+                    this.htmlTemplateSearchPath.unshift(subHtml);
+                    this.scriptSearchPath.unshift(subJs, subBase);
+                }
+            } catch {
+                // assetsDir may not exist yet — silently skip
+            }
         }
 
         setMediaCollector(this);
