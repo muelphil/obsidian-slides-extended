@@ -111,12 +111,50 @@ export class YamlParser {
             "markdown",
             "mermaid",
         ];
+
+        // OSE-internal keys that must NOT be forwarded to Reveal.initialize().
+        const oseInternalKeys = new Set([
+            "bg",
+            "css",
+            "remoteCSS",
+            "scripts",
+            "remoteScripts",
+            "plugins",
+            "template",
+            "defaultTemplate",
+            "showGrid",
+            "log",
+            "enableLinks",
+            "enableCustomControls",
+            "enableOverview",
+            "enableChalkboard",
+            "enableMenu",
+            "enablePointer",
+            "enableTimeBar",
+            "enableAudioSlideshow",
+            "timeForPresentation",
+            "title",
+            "separator",
+            "verticalSeparator",
+            "notesSeparator",
+            "mathEngine",
+            "highlightTheme",
+        ]);
+
         const globalSettings = pick(
             omitBy(this.settings, isEmpty),
             revealProps,
         );
         const slideSettings = pick(options, revealProps);
-        return Object.assign({}, globalSettings, slideSettings);
+
+        // Pass through any extra frontmatter keys not in the OSE-internal blocklist
+        // so plugins can read them via deck.getConfig() (e.g. author, institution, date).
+        const extraKeys = Object.keys(options).filter(
+            (k) => !revealProps.includes(k) && !oseInternalKeys.has(k),
+        );
+        const extraSettings = pick(options, extraKeys);
+
+        return Object.assign({}, globalSettings, slideSettings, extraSettings);
     }
 
     getTemplateSettings(options: Partial<Options>) {

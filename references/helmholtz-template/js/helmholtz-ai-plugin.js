@@ -280,7 +280,8 @@ const HelmholtzAIPlugin = (() => {
        Separator: "\n\n---\n\n"  (blank line on both sides of ---)
 
        defaults – object with presentation-level metadata (author, institution,
-                  date, …) read from the Reveal.initialize() metadata block.
+                  date, …) read from the Reveal.initialize() options — these
+                  are the flat frontmatter keys passed through from OSE.
                   Individual slides may override any key in their own YAML.
        ----------------------------------------------------------------------- */
     preprocessMarkdown(text, defaults = {}) {
@@ -295,7 +296,7 @@ const HelmholtzAIPlugin = (() => {
        Post-process the rendered DOM, then inject header/footer chrome.
        ----------------------------------------------------------------------- */
     init(deck) {
-      const userCfg = deck.getConfig().metadata || {};
+      const userCfg = deck.getConfig();
       const cfg = {
         author:     userCfg.author     || '',
         shortTitle: userCfg.shortTitle || '',
