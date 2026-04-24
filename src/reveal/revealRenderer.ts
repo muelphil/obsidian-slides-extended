@@ -132,6 +132,11 @@ export class RevealRenderer {
             options.plugins,
             this.utils.getScriptSearchPath(),
         );
+        if (options.plugins) {
+            console.info(
+                `[Slides Extended] plugins option value: "${options.plugins}"`,
+            );
+        }
 
         const settings = this.yaml.getTemplateSettings(options);
 
@@ -207,16 +212,18 @@ export class RevealRenderer {
             return name;
         }
 
+        const ext = extname(name) || ".css";
+
         for (const dir of searchPath) {
-            // Direct path match (handles subdirectories like css/custom.css)
+            // Direct path match (handles subdirectories like helmholtz-ai/js/plugin.js)
             const directPath = path.join(dir, name);
             if (existsSync(directPath)) {
                 return this.toExternalPath(directPath);
             }
 
-            // Basename glob match (existing behavior for short names like "black")
-            const files = glob.sync("*.css", { cwd: dir });
-            const key = basename(name).replace(extname(name), "");
+            // Basename glob match for short names (e.g. "black" → "black.css")
+            const files = glob.sync(`*${ext}`, { cwd: dir });
+            const key = basename(name).replace(ext, "");
             const match = files.find(
                 (f) => basename(f).replace(extname(f), "") === key,
             );
@@ -298,19 +305,51 @@ export class RevealRenderer {
             const colonIdx = trimmed.lastIndexOf(":");
             if (colonIdx === -1) {
                 // No global name specified — load as plain script, skip plugin array.
-                pluginPaths.push(this.findAsset(trimmed, searchPath));
+                const resolved = this.findAsset(trimmed, searchPath);
+                if (resolved === trimmed) {
+                    console.warn(
+                        `[Slides Extended] Plugin script not found in search path: "${trimmed}". ` +
+                            "Check your Assets directory setting and file path.",
+                    );
+                } else {
+                    console.info(
+                        `[Slides Extended] Loaded plain script: "${trimmed}" → "${resolved}"`,
+                    );
+                }
+                pluginPaths.push(resolved);
                 continue;
             }
 
             const filePath = trimmed.slice(0, colonIdx).trim();
             const globalName = trimmed.slice(colonIdx + 1).trim();
 
-            if (!filePath || !globalName) continue;
+            if (!filePath || !globalName) {
+                console.warn(
+                    `[Slides Extended] Ignoring malformed plugin entry: "${trimmed}". ` +
+                        "Expected format: path/to/plugin.js:GlobalName",
+                );
+                continue;
+            }
 
-            pluginPaths.push(this.findAsset(filePath, searchPath));
+            const resolved = this.findAsset(filePath, searchPath);
+            if (resolved === filePath) {
+                console.warn(
+                    `[Slides Extended] Plugin file not found: "${filePath}" (global: ${globalName}). ` +
+                        `Searched in: [${searchPath.join(", ")}]. ` +
+                        "Check your Assets directory setting and file path.",
+                );
+            } else {
+                console.info(
+                    `[Slides Extended] Loaded Reveal.js plugin: "${filePath}" → "${resolved}" (global: ${globalName})`,
+                );
+            }
+            pluginPaths.push(resolved);
             pluginNames.push(globalName);
         }
 
+        console.info(
+            `[Slides Extended] Plugin injection summary: paths=[${pluginPaths.join(", ")}] names=[${pluginNames.join(", ")}]`,
+        );
         return { pluginPaths, pluginNames };
     }
 

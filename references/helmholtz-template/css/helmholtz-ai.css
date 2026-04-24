@@ -76,34 +76,62 @@
    --------------------------------------------------------------------------- */
 
 :root {
-    /* Core palette (from beamercolorthemehelmholtzai.sty) */
-    --hzai-darkblue: #002864; /* hgfdarkblue  RGB(0,40,100)    */
-    --hzai-blue: #005AA0; /* hgfblue      RGB(0,90,160)    */
-    --hzai-lightblue: #14C8FF; /* hgflightblue RGB(20,200,255)  */
-    --hzai-gray: #5A696E; /* hgfgray      RGB(90,105,110)  */
-    --hzai-green: #8CB423;
-    --hzai-mint: #05E5BA;
-    --hzai-highlight: #CDEEFB;
-    --hzai-matter: #F0781E; /* hgfmatter – used for author in footer */
+    /* ── Reveal.js internals (required by the plugin's exposer.scss) ── */
+    --r-background-color:           #ffffff;
+    --r-main-font:                  'HalvarMittel', Arial, Helvetica, sans-serif;
+    --r-main-font-size:             43px;        /* calibrated for 1600×1000 */
+    --r-main-color:                 #002864;
+    --r-block-margin:               16px;
+    --r-heading-margin:             0 0 16px 0;
+    --r-heading-font:               'HermannBold', 'HalvarMittel', Arial, sans-serif;
+    --r-heading-color:              #002864;
+    --r-heading-line-height:        1.15;
+    --r-heading-letter-spacing:     0.01em;
+    --r-heading-text-transform:     uppercase;
+    --r-heading-text-shadow:        none;
+    --r-heading-font-weight:        700;
+    --r-heading1-text-shadow:       none;
+    --r-heading1-size:              2.5em;
+    --r-heading2-size:              1.8em;
+    --r-heading3-size:              0.78em;
+    --r-heading4-size:              0.9em;
+    --r-code-font:                  'TexGyreCursor', 'Courier New', monospace;
+    --r-link-color:                 #05E5BA;
+    --r-link-color-dark:            #04b594;
+    --r-link-color-hover:           #14C8FF;
+    --r-selection-background-color: rgba(20, 200, 255, 0.75);
+    --r-selection-color:            #ffffff;
+    --r-overlay-element-bg-color:   240, 240, 240;
+    --r-overlay-element-fg-color:   0, 0, 0;
+
+    /* ── Helmholtz AI design tokens ── */
+    --hzai-darkblue:    #002864;
+    --hzai-blue:        #005AA0;
+    --hzai-lightblue:   #14C8FF;
+    --hzai-gray:        #5A696E;
+    --hzai-green:       #8CB423;
+    --hzai-mint:        #05E5BA;
+    --hzai-highlight:   #CDEEFB;
+    --hzai-matter:      #F0781E;
 
     /* Research-field accents */
-    --hzai-aerospace: #50C8AA;
-    --hzai-earth: #326469;
-    --hzai-energy: #FFD228;
-    --hzai-health: #D23264;
+    --hzai-aerospace:   #50C8AA;
+    --hzai-earth:       #326469;
+    --hzai-energy:      #FFD228;
+    --hzai-health:      #D23264;
     --hzai-information: #A0235A;
 
     /* ── Layout constants (in 1600 × 1000 slide-px) ── */
-    --hzai-logo-top: 27px; /* 2.7% × 1000 */
-    --hzai-logo-left: 43px; /* 4.3% × 1000 */
-    --hzai-logo-height: 20px; /* 2.0% × 1000 */
-    --hzai-content-pad-h: 50px; /* horizontal slide padding */
-    --hzai-footer-h: 46px; /* 13.091/461 × 1600 ≈ 45.4 → 46px */
+    --hzai-logo-top:       27px;
+    --hzai-logo-left:      43px;
+    --hzai-logo-height:    20px;
+    --hzai-content-pad-h:  50px;
+    --hzai-footer-h:       46px;
 
-    /* ── Fonts ── */
-    --hzai-font-body: 'HalvarMittel', Arial, Helvetica, sans-serif;
+    /* ── Font aliases ── */
+    --hzai-font-body:  'HalvarMittel', Arial, Helvetica, sans-serif;
     --hzai-font-title: 'HermannBold', 'HalvarMittel', Arial, sans-serif;
-    --hzai-font-mono: 'TexGyreCursor', 'Courier New', monospace;
+    --hzai-font-mono:  'TexGyreCursor', 'Courier New', monospace;
 }
 
 /* ---------------------------------------------------------------------------
