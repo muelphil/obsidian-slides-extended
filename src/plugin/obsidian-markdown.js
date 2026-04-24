@@ -1,11 +1,17 @@
 window.ObsidianMarkdown = window.ObsidianMarkdown || {
-    id: "ObsidianMarkdown",
+    // Use the standard "markdown" id so deck.getPlugin('markdown') resolves
+    // to this plugin (required by theme plugins like HelmholtzAIPlugin).
+    id: "markdown",
 
     init: (deck) => {
         // Create the markdown plugin (this is confusing with binds)
         const self = window.ObsidianMarkdown;
         const revealMarkdownPlugin = RevealMarkdown();
         const marked = revealMarkdownPlugin.marked;
+
+        // Expose marked on the plugin object so theme plugins can access
+        // deck.getPlugin('markdown').marked for inline/block parsing.
+        self.marked = marked;
 
         // Special Obsidian markdown parsing that should be done
         // when reveal.js is rendering slides
