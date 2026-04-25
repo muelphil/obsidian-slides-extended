@@ -246,8 +246,15 @@ export class MarkdownProcessor {
                 name: "fragmentProcessor",
                 processor: this.fragmentProcessor,
             },
-            // Process drop layouts
-            { name: "dropProcessor", processor: this.dropProcessor },
+            // Process drop layouts (skip when enableDrop is explicitly false)
+            ...(options.enableDrop === false
+                ? []
+                : [
+                      {
+                          name: "dropProcessor",
+                          processor: this.dropProcessor,
+                      },
+                  ]),
             // Process grid layouts
             { name: "gridProcessor", processor: this.gridProcessor },
             // Process slide comments

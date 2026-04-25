@@ -35,6 +35,7 @@ export interface SlidesExtendedSettings {
     scripts: string;
     remoteScripts: string;
     plugins: string;
+    enableDrop: boolean;
     separator: string;
     verticalSeparator: string;
 }
@@ -76,6 +77,7 @@ export type Options = {
     verticalSeparator: string;
     width: number;
     enableCustomControls: boolean;
+    enableDrop?: boolean;
     transition: string;
     mathEngine: "katex" | "mathjax";
     // biome-ignore lint/suspicious/noExplicitAny: minimal adaptation to Chart.js types

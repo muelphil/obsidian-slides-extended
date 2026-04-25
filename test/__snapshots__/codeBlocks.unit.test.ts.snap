@@ -24,13 +24,12 @@ exports[`Code Block Syntax > Math with Code Blocks 1`] = `
 "<!-- .slide: class="drop" -->
 <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
 
-$$\\\\begin{vmatrix}a & b\\\\\\\\ c & d \\\\end{vmatrix}=ad-bc$$
+$$\\\\\\\\begin{vmatrix}a & b\\\\\\\\\\\\\\\\
+ c & d
+ \\\\\\\\end{vmatrix}=ad-bc$$
+&#126;&#126;CODE&#126;BLOCK&#126;0&#126;&#126;
 
-\`\`\`dockerfile
-USER $USER_NAME:$USER_NAME
-\`\`\`
-
-You can also do inline math like $s^{-2}\\_{n}\\\\sum\\_{i=1}^{n}$
+You can also do inline math like $s^{-2}_{n}\\sum_{i=1}^{n}$
 </div>"
 `;
 
@@ -38,16 +37,13 @@ exports[`Code Block Syntax > Math with Mixed Code Blocks 1`] = `
 "<!-- .slide: class="drop" -->
 <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
 
-$$\\\\begin{vmatrix}a & b\\\\\\\\ c & d \\\\end{vmatrix}=ad-bc$$
+$$\\\\\\\\begin{vmatrix}a & b\\\\\\\\\\\\\\\\
+ c & d
+ \\\\\\\\end{vmatrix}=ad-bc$$
+&#126;&#126;CODE&#126;BLOCK&#126;0&#126;&#126;
 
-\`\`\`\`md
-\`\`\`dockerfile
-USER $USER_NAME:$USER_NAME
-\`\`\`
-\`\`\`\`
-
-You can also use inline syntax (\`$s^{-2}_{n}\\sum_{i=1}^{n}$\`)
-to do inline math like $s^{-2}\\_{n}\\\\sum\\_{i=1}^{n}$
+You can also use inline syntax (&#126;&#126;INLINE&#126;BLOCK&#126;0&#126;&#126;)
+to do inline math like $s^{-2}_{n}\\sum_{i=1}^{n}$
 </div>"
 `;
 

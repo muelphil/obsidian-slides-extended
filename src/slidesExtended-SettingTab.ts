@@ -362,6 +362,19 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
             );
 
         new Setting(containerEl)
+            .setName("Enable drop layout")
+            .setDesc(
+                "When enabled, slide content is wrapped in a full-slide absolute grid (the 'drop' system). Disable if using an external theme that manages its own layout (e.g. Helmholtz AI). Override per-note with the 'enableDrop' property.",
+            )
+            .addToggle((value) =>
+                value
+                    .setValue(this.newSettings.enableDrop)
+                    .onChange((value) => {
+                        this.newSettings.enableDrop = value;
+                    }),
+            );
+
+        new Setting(containerEl)
             .setName("Presentation Plugins")
             .setHeading()
             .setDesc(

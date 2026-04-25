@@ -33,6 +33,7 @@ export const DEFAULT_SETTINGS: SlidesExtendedSettings = {
     scripts: "",
     remoteScripts: "",
     plugins: "",
+    enableDrop: true,
     separator: "",
     verticalSeparator: "",
 };
@@ -42,6 +43,7 @@ export const DEFAULTS: Options = {
     css: "",
     defaultTemplate: "",
     enableCustomControls: true,
+    enableDrop: true,
     enableLinks: false,
     height: 700,
     highlightTheme: "zenburn",

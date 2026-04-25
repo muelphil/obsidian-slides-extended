@@ -125,6 +125,7 @@ export class YamlParser {
             "showGrid",
             "log",
             "enableLinks",
+            "enableDrop",
             "enableCustomControls",
             "enableOverview",
             "enableChalkboard",
