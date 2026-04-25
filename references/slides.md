@@ -60,6 +60,13 @@ All slides after this point demonstrate individual template features.
 
 ---
 
+# Hello world
+* one
+* two
+* three
+
+---
+
 ## Main Slide Title
 
 <p class="subtitle">Subtitle with more details</p>
