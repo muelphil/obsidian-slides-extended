@@ -14,6 +14,7 @@ const map = {
     'plugin/reveal.js-elapsed-time-bar/elapsed-time-bar.js': 'plugin/elapsed-time-bar/elapsed-time-bar',
     'plugin/load-mathjax.js': 'plugin/load-mathjax',
     'plugin/obsidian-markdown.js': 'plugin/obsidian-markdown',
+    'plugin/grid-editor.js': 'plugin/grid-editor',
     'scss/layout/slides-extended.scss': 'css/slides-extended',
 };
 

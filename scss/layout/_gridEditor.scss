@@ -1,0 +1,54 @@
+.slides-extended-coordinates {
+    position: fixed;
+    top: 8px;
+    right: 8px;
+    z-index: 1000;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    font-family: monospace;
+    font-size: 12px;
+    pointer-events: none;
+}
+
+body.slides-extended-edit-mode .reveal .slides {
+    outline: 2px dashed gray;
+}
+
+.slides-extended-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    z-index: 2147483647;
+    background: transparent;
+    transform: translateZ(1000px);
+}
+
+body.slides-extended-edit-mode .slides-extended-overlay {
+    display: block;
+}
+
+.slides-extended-rect-layer {
+    display: none;
+    position: absolute;
+    inset: 0;
+    z-index: 2147483646;
+    pointer-events: none;
+    transform: translateZ(1px);
+}
+
+body.slides-extended-edit-mode .slides-extended-rect-layer {
+    display: block;
+}
+
+body.slides-extended-edit-mode .reveal .slides section * {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.slides-extended-draw-rect {
+    position: absolute;
+    border: 2px dotted green;
+    pointer-events: none;
+}
