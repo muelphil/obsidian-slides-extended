@@ -47,8 +47,23 @@ body.slides-extended-edit-mode .reveal .slides section * {
     -webkit-user-select: none;
 }
 
+body.slides-extended-edit-mode .reveal .slides [data-slides-grid] {
+    overflow: visible !important;
+}
+
 .slides-extended-draw-rect {
     position: absolute;
     border: 2px dotted green;
     pointer-events: none;
+}
+
+.slides-extended-grid-indicator {
+    position: absolute;
+    border: 2px dashed darkgray;
+    pointer-events: none;
+    z-index: 2147483646;
+}
+
+.slides-extended-grid-indicator.is-active {
+    border: 2px solid orange;
 }
