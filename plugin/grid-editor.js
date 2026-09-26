@@ -17,6 +17,64 @@
             return document.querySelector(".reveal .slides") ?? document.body;
         },
 
+        // True when the reveal page is opened standalone (e.g. "Open in
+        // Browser"), not embedded in an Obsidian preview iframe.
+        isStandalone() {
+            return window.parent === window;
+        },
+
+        // The markdown <grid> tag for a drawn rectangle, matching the format
+        // inserted by the Obsidian plugin (src/reveal/revealPreviewView.ts).
+        buildGridTag(left, top, width, height) {
+            const p = this.precision ?? 1;
+            return `<grid drag="${width.toFixed(p)} ${height.toFixed(p)}" drop="${left.toFixed(p)} ${top.toFixed(p)}">\n\n</grid>\n`;
+        },
+
+        // Copies text to the clipboard, returning a promise. Falls back to
+        // the legacy execCommand API if the async Clipboard API is blocked.
+        async copyToClipboard(text) {
+            if (navigator.clipboard?.writeText) {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    return true;
+                } catch {
+                    // fall through to legacy path
+                }
+            }
+            const textarea = document.createElement("textarea");
+            textarea.value = text;
+            textarea.style.position = "fixed";
+            textarea.style.opacity = "0";
+            document.body.appendChild(textarea);
+            textarea.select();
+            let ok = false;
+            try {
+                ok = document.execCommand("copy");
+            } catch {
+                ok = false;
+            }
+            textarea.remove();
+            return ok;
+        },
+
+        // Brief "Copied!" toast shown when the grid tag is copied to the
+        // clipboard in standalone (browser) mode.
+        showCopiedToast() {
+            let toast = document.getElementById("slides-extended-copied-toast");
+            if (!toast) {
+                toast = document.createElement("div");
+                toast.id = "slides-extended-copied-toast";
+                toast.className = "slides-extended-copied-toast";
+                document.body.appendChild(toast);
+            }
+            toast.textContent = "Copied!";
+            toast.classList.add("is-visible");
+            clearTimeout(this.copiedToastTimer);
+            this.copiedToastTimer = setTimeout(() => {
+                toast.classList.remove("is-visible");
+            }, 1500);
+        },
+
         getOverlay() {
             let overlay = document.querySelector(".slides-extended-overlay");
             if (!overlay) {
@@ -284,6 +342,20 @@
                     console.log(
                         `[GridEditor] rectangle drawn: top-left (${left.toFixed(precision)}, ${top.toFixed(precision)}), bottom-right (${right.toFixed(precision)}, ${bottom.toFixed(precision)})`
                     );
+
+                    // Standalone (browser) mode has no Obsidian editor to
+                    // insert into, so copy the grid tag instead and let the
+                    // user paste it manually.
+                    if (self.isStandalone()) {
+                        void self.copyToClipboard(
+                            self.buildGridTag(left, top, width, height),
+                        ).then((ok) => {
+                            if (ok) {
+                                self.showCopiedToast();
+                            }
+                        });
+                        return;
+                    }
 
                     parent.postMessage(
                         {

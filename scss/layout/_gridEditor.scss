@@ -12,8 +12,25 @@
     pointer-events: none;
 }
 
-body.slides-extended-edit-mode .reveal .slides {
-    outline: 2px dashed gray;
+.slides-extended-copied-toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(8px);
+    z-index: 1000;
+    padding: 6px 14px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    font-size: 13px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.slides-extended-copied-toast.is-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
 }
 
 .slides-extended-overlay {
