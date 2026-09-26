@@ -71,12 +71,14 @@ body.slides-extended-edit-mode .reveal .slides [data-slides-grid] {
 .slides-extended-draw-rect {
     position: absolute;
     border: 2px dotted green;
+    box-sizing: border-box;
     pointer-events: none;
 }
 
 .slides-extended-grid-indicator {
     position: absolute;
     border: 2px dashed darkgray;
+    box-sizing: border-box;
     pointer-events: none;
     z-index: 2147483646;
 }
