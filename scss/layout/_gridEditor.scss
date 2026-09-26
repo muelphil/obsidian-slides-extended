@@ -67,3 +67,19 @@ body.slides-extended-edit-mode .reveal .slides [data-slides-grid] {
 .slides-extended-grid-indicator.is-active {
     border: 2px solid orange;
 }
+
+.slides-extended-gridlines {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.slides-extended-gridline {
+    border: thin dotted blue;
+    box-sizing: border-box;
+}
