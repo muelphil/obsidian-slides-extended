@@ -261,6 +261,14 @@
                     const width = right - left;
                     const height = bottom - top;
                     if (width < 0.5 || height < 0.5) {
+                        // Plain click (no rectangle): ask the parent to focus
+                        // the preview frame so arrow keys navigate the slides.
+                        // The markdown editor only grabs focus when a real
+                        // grid is actually inserted.
+                        parent.postMessage(
+                            { type: "slides-extended-focus-frame" },
+                            "*",
+                        );
                         return;
                     }
 
