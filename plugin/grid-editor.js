@@ -88,6 +88,15 @@
                 self.refreshIndicators(deck);
             });
 
+            // 'ready' fires after start() has set the current slide, so this
+            // is the first moment getCurrentSlide() is valid. The init-time
+            // refreshIndicators call above no-ops because currentSlide is
+            // still null during plugins.load; this ensures the first slide
+            // gets its indicators without needing to navigate away and back.
+            deck.on("ready", () => {
+                self.refreshIndicators(deck);
+            });
+
             const readout = document.createElement("div");
             readout.id = "slides-extended-coordinates";
             readout.className = "slides-extended-coordinates";
