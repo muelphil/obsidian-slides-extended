@@ -24,6 +24,7 @@ export class RevealPreviewView extends ItemView {
     private plugin: SlidesExtendedPlugin;
     private editAction: HTMLElement;
     private gridAction: HTMLElement;
+    private gridDrawInsertToken = 0;
 
     constructor(
         leaf: WorkspaceLeaf,
@@ -135,7 +136,25 @@ export class RevealPreviewView extends ItemView {
 
     onMessage(msg: MessageEvent) {
         if (this.isGridDrawMessage(msg.data)) {
-            this.insertGridAtCursor(msg.data);
+            // A slide-changed postMessage from the same draw interaction can
+            // reach this handler before the grid-draw message and re-render
+            // the view, destroying the editor instance the grid insertion
+            // would target. Queue the insertion and run it after the
+            // message loop (and any resulting re-render) has settled.
+            const data = msg.data as {
+                left: number;
+                top: number;
+                width: number;
+                height: number;
+                slidesGrid?: string | number | null;
+                slide?: string | null;
+            };
+            const token = ++this.gridDrawInsertToken;
+            window.setTimeout(() => {
+                if (token === this.gridDrawInsertToken) {
+                    this.insertGridAtCursor(data);
+                }
+            }, 0);
             return;
         }
 
